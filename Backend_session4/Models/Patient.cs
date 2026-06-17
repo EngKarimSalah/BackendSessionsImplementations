@@ -20,5 +20,14 @@ namespace Backend_session4.Models
             patientEmail= email;
             patientBloodType= bloodType;
         }
+    
+        public void printInfo()
+        {
+            Console.WriteLine($"ID: {patientId}  |  Name: {patientName}  |  Age: {patientAge}" +
+                                 $"  |  Gender: {patientGender}  |  Blood Type: {patientBloodType}" +
+                                 $"  |  Phone: {patientPhone}  |  Email: {patientEmail}");
+
+        }
+
     }
 }

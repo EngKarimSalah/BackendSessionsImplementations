@@ -102,14 +102,38 @@ namespace Backend_session4
                 return;
             }
 
+            //where ==> replaces foreach and contains if condition , foreach(int i in grades) { if(i > 10) ---- } 
+
             // LINQ: ForEach to print each patient
-           foreach(Patient p in patients)
-                {
-                Console.WriteLine($"ID: {p.patientId}  |  Name: {p.patientName}  |  Age: {p.patientAge}" +
-                                  $"  |  Gender: {p.patientGender}  |  Blood Type: {p.patientBloodType}" +
-                                  $"  |  Phone: {p.patientPhone}  |  Email: {p.patientEmail}");
+            foreach (Patient p in patients)
+            {
+                p.printInfo();
             }
+
         }
+
+        public static void ViewAllPatientsOlderthanFifty(List<Patient> patients)
+        {
+            Console.WriteLine("\n=== All Registered Patients ===");
+
+            if (patients.Count == 0)
+            {
+                Console.WriteLine("No patients have been registered yet.");
+                return;
+            }
+
+
+           List<Patient> olderThanFifty = patients.Where(p => p.patientAge > 25).ToList();
+
+            // LINQ: ForEach to print each patient
+            foreach (Patient p in olderThanFifty)
+            {
+                p.printInfo();
+            }
+
+        }
+
+
 
         // ─────────────────────────────────────────────────────────────────────
         // EASY 04 — View Doctors by Specialization
@@ -120,7 +144,7 @@ namespace Backend_session4
             Console.WriteLine("\n=== Search Doctors by Specialization ===");
 
             Console.Write("Enter specialization to search: ");
-            string input = Console.ReadLine().Trim().ToLower();
+            string input = Console.ReadLine().ToLower(); 
 
             // LINQ: Where() to filter by specialization
             List<Doctor> matched = doctors.Where(d => d.doctorSpecialization.ToLower() == input).ToList();
@@ -131,10 +155,15 @@ namespace Backend_session4
                 return;
             }
 
-            matched.ForEach(d =>
-                Console.WriteLine($"ID: {d.doctorId}  |  Name: {d.doctorName}" +
-                                  $"  |  Phone: {d.doctorPhone}  |  Fee: {d.consultationFee:C}")
-            );
+            foreach (Doctor doctor in matched)
+            {
+                Console.WriteLine("Did= "+ doctor.doctorId+ " Dr Name: " + doctor.doctorName);
+               
+            }
+            //or another way
+            matched.ForEach( doctor => Console.WriteLine("Did= " + doctor.doctorId + " Dr Name: " + doctor.doctorName) );
+
+
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -161,13 +190,25 @@ namespace Backend_session4
             int doctorId = int.Parse(Console.ReadLine());
 
             // LINQ: FirstOrDefault() to find doctor by ID
-            Doctor doctor = context.Doctors.FirstOrDefault(d => d.doctorId == doctorId);
+            //Doctor doctor = context.Doctors.FirstOrDefault(d => d.doctorId == doctorId);
+            //if (doctor == null)
+            //{
+            //    Console.WriteLine("Doctor not found.");
+            //    return;
+            //}
 
-            if (doctor == null)
+            //or 
+
+            //will use any because we need only check if doctorId valid, we don't need doctor object himself
+            bool result = context.Doctors.Any(d => d.doctorId == doctorId);
+
+            if (result == false)
             {
-                Console.WriteLine("Doctor not found.");
+                Console.WriteLine("no doctor found with id");
                 return;
             }
+
+
 
             Console.Write("Enter slot date (e.g. 2026-07-10): ");
             string date = Console.ReadLine();
@@ -186,8 +227,10 @@ namespace Backend_session4
                 isBooked = false
             });
 
-            Console.WriteLine($"Slot added successfully for Dr. {doctor.doctorName} on {date} at {time}.");
+            Console.WriteLine($"Slot added successfully ");
         }
+
+
 
         // ─────────────────────────────────────────────────────────────────────
         // MEDIUM 06 — Book an Appointment
@@ -209,6 +252,12 @@ namespace Backend_session4
                 return;
             }
 
+
+            //let the user choose from the doctors list in specific specialization
+            ViewDoctorsBySpecialization(context.Doctors);
+
+
+
             Console.Write("Enter doctor ID to book with: ");
             int doctorId = int.Parse(Console.ReadLine());
 
@@ -221,10 +270,12 @@ namespace Backend_session4
                 return;
             }
 
+
+
+
             // LINQ: Where() to filter unbooked slots for this doctor
-            List<AvailableSlot> openSlots = context.AvailableSlots
-                .Where(s => s.doctorId == doctorId && s.isBooked == false)
-                .ToList();
+            List<AvailableSlot> openSlots = context.AvailableSlots.Where(s => s.doctorId == doctorId && s.isBooked == false)
+                                                                  .ToList();
 
             if (openSlots.Count == 0)
             {
@@ -261,7 +312,7 @@ namespace Backend_session4
                 status = "Scheduled"
             });
 
-            selectedSlot.isBooked = true;
+            selectedSlot.isBooked = true;//make slot unavailable for future booking
 
             Console.WriteLine($"Appointment booked successfully! Appointment ID: {appointmentId}" +
                               $" | Date: {selectedSlot.slotDate} | Time: {selectedSlot.slotTime}");
@@ -484,13 +535,26 @@ namespace Backend_session4
         // MAIN — Menu Loop
         // ─────────────────────────────────────────────────────────────────────
         static void Main(string[] args)
-        {
-            HospitalContext context = new HospitalContext();
-            context.Patients = new List<Patient>();
+        { 
+
+            HospitalContext context = new HospitalContext();          
             context.Doctors = new List<Doctor>();
             context.Appointments = new List<Appointment>();
             context.MedicalRecords = new List<MedicalRecord>();
             context.AvailableSlots = new List<AvailableSlot>();
+
+            //seed Data
+            context.Patients = new List<Patient>()
+            {
+                new Patient(1,"mostafa",30,"male","988233","mo@gmail.com","O+"),
+                 new Patient(2, "ali", 22, "male", "932444", "ali@gmail.com", "O-"),
+                  new Patient(3, "karim", 30, "male", "988233", "karim@gmail.com", "O+"),
+                   new Patient(4, "mostafa", 28, "male", "988233", "mostafa@gmail.com", "A")
+
+             };
+
+
+
 
             bool exit = false;
 
