@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="../Backend-Seesion-1/Backend-Seesion-1.csproj" />
+  <Project Path="../Backend-session2/Backend-session2.csproj" />
   <Project Path="Backend-session3/Backend-session3.csproj" />
 </Solution>
