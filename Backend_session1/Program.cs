@@ -1,9 +1,9 @@
-﻿using Backend_Seesion_1.Models;
-using Backend_Seesion_1.Services;
+﻿using Backend_session1.Models;
+using Backend_session1.Services;
 using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Backend_Seesion_1
+namespace Backend_session1
 {
     public class Program
     {

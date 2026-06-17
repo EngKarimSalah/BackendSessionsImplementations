@@ -1,9 +1,9 @@
-﻿using Backend_Seesion_1.Models;
+﻿using Backend_session1.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Backend_Seesion_1.Services
+namespace Backend_session1.Services
 {
     public class BankAccountServices
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Backend_Seesion_1.Models
+namespace Backend_session1.Models
 {
     public class UserModel
     {
