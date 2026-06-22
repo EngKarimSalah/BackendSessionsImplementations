@@ -3,5 +3,5 @@
   <Project Path="Backend-session3/Backend-session3.csproj" />
   <Project Path="Backend_session1/Backend_session1.csproj" Id="eedd3b7b-25ab-4897-a4bb-bb3b42db7be0" />
   <Project Path="Backend_session4/Backend_session4.csproj" Id="21036397-1835-48c1-9755-0f0047dae037" />
-  <Project Path="OOP_Part3/Backend_session5.csproj" />
+  <Project Path="Backend_session5/Backend_session5.csproj" />
 </Solution>

@@ -6,8 +6,6 @@ namespace OOP_Part3
 {
     public class Program
     {
-       
-
         //system storage ( actual storage in memory for all lists ) 
         public static HospitalContext context = new HospitalContext
         {
@@ -45,15 +43,6 @@ namespace OOP_Part3
         // - check existance=> Any ( true or false if object exist )
         //- 
 
-
-        //Any function behaviour is Add => input collection of data of the same type (same class of affected list)
-        //                              => output generated unique ID for this recently added object
-
-        //Any function behaviour is read => read without condition ( read all ) output show all
-        //                               => read with condition ( specific values / filters ) output show specifcs
-        
-        //Any function behavoir is update or delete => input unique ID and new value in case of user input data update
-        //                                             output confirmation message 
         public static void RegisterPatient()
         {
             Console.WriteLine("\n=== Register New Patient ===");
@@ -392,7 +381,14 @@ namespace OOP_Part3
         // ─────────────────────────────────────────────────────────────────────
         static void Main(string[] args)
         {
-          
+
+            //Console.WriteLine("Enter your name");
+            //string name = Console.ReadLine();
+
+            ////object initializer
+            //Patient p2 = new Patient {patientId =2, patientName=name  };
+
+
             bool exit = false;
 
             while (exit == false)
@@ -400,16 +396,16 @@ namespace OOP_Part3
                 Console.WriteLine("\n========================================");
                 Console.WriteLine("   Hospital Management System");
                 Console.WriteLine("========================================");
-                Console.WriteLine(" 1  - Register Patient"); //Add, list(patients)
-                Console.WriteLine(" 2  - Add Doctor"); // Add, list(doctors)
-                Console.WriteLine(" 3  - View All Patients"); // read, List(patients)
-                Console.WriteLine(" 4  - View Doctors by Specialization"); //read, List(doctors)
-                Console.WriteLine(" 5  - Add Available Slot for Doctor");// Add, internal read , List(doctors, slots)
-                Console.WriteLine(" 6  - Book an Appointment");// Add, internal reads and update, List ( doctor, pa, slots, appoint)
-                Console.WriteLine(" 7  - Cancel an Appointment"); //update , internal read, List(appoin, slot)
-                Console.WriteLine(" 8  - Create Medical Record"); //Add, internal read, List( appoint, patient)
-                Console.WriteLine(" 9  - Patient Medical History Report"); //read, List(medical report)
-                Console.WriteLine(" 10 - Doctor Workload & Revenue Summary"); //read, List(doctors, appoint)
+                Console.WriteLine(" 1  - Register Patient");
+                Console.WriteLine(" 2  - Add Doctor");
+                Console.WriteLine(" 3  - View All Patients");
+                Console.WriteLine(" 4  - View Doctors by Specialization");
+                Console.WriteLine(" 5  - Add Available Slot for Doctor");
+                Console.WriteLine(" 6  - Book an Appointment");
+                Console.WriteLine(" 7  - Cancel an Appointment");
+                Console.WriteLine(" 8  - Create Medical Record");
+                Console.WriteLine(" 9  - Patient Medical History Report");
+                Console.WriteLine(" 10 - Doctor Workload & Revenue Summary");
                 Console.WriteLine(" 0  - Exit");
                 Console.WriteLine("========================================");
                 Console.Write("Select option: ");
