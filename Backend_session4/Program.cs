@@ -5,11 +5,13 @@ namespace Backend_session4
 {
     public class Program
     {
+        public static HospitalContext context1 = new HospitalContext();
+
         // ─────────────────────────────────────────────────────────────────────
         // EASY 01 — Patient Registration
         // touches: Patients only  →  receives List<Patient>
         // ─────────────────────────────────────────────────────────────────────
-        public static void RegisterPatient(List<Patient> patients)
+        public static void RegisterPatient()
         {
             Console.WriteLine("\n=== Register New Patient ===");
 
@@ -31,7 +33,7 @@ namespace Backend_session4
             Console.Write("Enter patient blood type (e.g. A+, O-): ");
             string bloodType = Console.ReadLine();
 
-            int patientId = patients.Count + 1;
+            int patientId = context1.Patients.Count + 1;
 
             //patients.Add(new Patient
             //{
@@ -44,8 +46,8 @@ namespace Backend_session4
             //    patientBloodType = bloodType
             //});
 
-
-            patients.Add(new Patient(patientId, name, age, gender, phone, email, bloodType));
+            context1.Patients.Add(new Patient(patientId, name, age, gender, phone, email, bloodType));
+            //patients.Add(new Patient(patientId, name, age, gender, phone, email, bloodType));
 
             Console.WriteLine($"Patient registered successfully. Assigned ID: {patientId}");
         }
@@ -581,7 +583,7 @@ namespace Backend_session4
 
                 switch (option)
                 {
-                    case 1: RegisterPatient(context.Patients); break;
+                    case 1: RegisterPatient(); break;
                     case 2: AddDoctor(context.Doctors); break;
                     case 3: ViewAllPatients(context.Patients); break;
                     case 4: ViewDoctorsBySpecialization(context.Doctors); break;
