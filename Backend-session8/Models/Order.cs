@@ -37,9 +37,9 @@ namespace ECommerce_Solution.Models
 
         // foreign key — every order must belong to exactly one user
         [Required]
-        [ForeignKey("User")]
+        [ForeignKey("user")]
         public int userId { get; set; }                   // from list — chosen from logged-in user
-        public User User { get; set; }                    // navigation property
+        public User user { get; set; }                    // navigation property
 
 
         // reverse navigation — one Order has many OrderItems (bridge table)

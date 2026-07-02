@@ -13,6 +13,21 @@ namespace ECommerce_Solution.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int orderItemId { get; set; }              // system generated
 
+
+        // relationship attribute — carried by this bridge entity
+        [Required]
+        [Range(1, 999)]
+        public int quantity { get; set; }                 // user input
+
+
+
+
+
+
+
+
+
+
         // foreign key — every order item belongs to exactly one order
         [Required]
         [ForeignKey("Order")]
@@ -27,10 +42,7 @@ namespace ECommerce_Solution.Models
 
 
 
-        // relationship attribute — carried by this bridge entity
-        [Required]
-        [Range(1, 999)]
-        public int quantity { get; set; }                 // user input
+
 
         [Required]
         [Column(TypeName = "decimal(10,2)")]

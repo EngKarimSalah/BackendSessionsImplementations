@@ -25,16 +25,16 @@ namespace ECommerce_Solution.Models
 
         // foreign key — every review is written by exactly one user
         [Required]
-        [ForeignKey("User")]
+        [ForeignKey("U")]
         public int userId { get; set; }                   // from list — from logged-in user
-        public User User { get; set; }                    // navigation property
+        public User U { get; set; }                    // navigation property
 
 
 
         // foreign key — every review is about exactly one product
         [Required]
-        [ForeignKey("Product")]
+        [ForeignKey("product")]
         public int productId { get; set; }                // from list — chosen from purchased products
-        public Product Product { get; set; }              // navigation property
+        public Product product { get; set; }              // navigation property
     }
 }

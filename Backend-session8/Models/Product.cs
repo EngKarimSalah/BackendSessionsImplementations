@@ -20,7 +20,7 @@ namespace ECommerce_Solution.Models
         [Required]
         [Column(TypeName = "decimal(10,2)")]
         [Range(0.01, double.MaxValue)]
-        public decimal price { get; set; }                 // user input
+        public double price { get; set; }                 // user input
 
         [Required]
         [Range(0, int.MaxValue)]
@@ -41,9 +41,9 @@ namespace ECommerce_Solution.Models
 
         // foreign key — every product must belong to a category
         [Required]
-        [ForeignKey("Category")]
+        [ForeignKey("c")]
         public int categoryId { get; set; }                // from list — chosen from categories list
-        public Category Category { get; set; }             // navigation property
+        public Category c { get; set; }             // navigation property
 
 
         // reverse navigation — one Product has many Reviews

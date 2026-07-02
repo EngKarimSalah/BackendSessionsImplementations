@@ -6,7 +6,7 @@ namespace ECommerce_Solution.Models
     [Table("Users")]
     public class User
     {
-        [Key]
+        [Key] //by default unique and not null no need to add [Required] attribute
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int userId { get; set; }                  // system generated
 
@@ -30,23 +30,23 @@ namespace ECommerce_Solution.Models
         public string phoneNumber { get; set; }           // user input
 
         [MaxLength(300)]
-        public string address { get; set; }               // user input
+        public string? address { get; set; }               // user input
 
-        [Required]
-        public DateTime registrationDate { get; set; }    // system generated — set to today's date
+        //? registrationDate is nullable because it will be set to today's date when the user is created, but it may not be set yet if the user is not created yet.
+        public DateTime? registrationDate { get; set; }    // system generated — set to today's date
 
         public bool isActive { get; set; } = true;        // default value
-       
-        /// /////////////////////////////////////////////////////////////////////////////
-      
 
+        /// /////////////////////////////////////////////////////////////////////////////
+
+        // reverse navigation — one User writes many Reviews
+        public List<Review> Reviews { get; set; }
 
 
 
         // reverse navigation — one User places many Orders
-        public List<Order> Orders { get; set; } = new List<Order>();
+        public List<Order> Orders { get; set; }
 
-        // reverse navigation — one User writes many Reviews
-        public List<Review> Reviews { get; set; } = new List<Review>();
+
     }
 }

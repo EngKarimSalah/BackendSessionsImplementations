@@ -28,6 +28,6 @@ namespace ECommerce_Solution.Models
 
 
         // reverse navigation — one Category has many Products
-        public List<Product> Products { get; set; } = new List<Product>();
+        public List<Product> Products { get; set; } 
     }
 }
