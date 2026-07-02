@@ -29,21 +29,29 @@ namespace ECommerce_Solution.Models
         [MaxLength(300)]
         public string imageUrl { get; set; }               // user input
 
+        [Required]
+        public DateTime createdAt { get; set; }            // system generated — set to today's date
+
+        public bool isAvailable { get; set; } = true;      // default value
+
+        /////////////////////////////////////////////////////////////////////////////////
+
+
+
+
         // foreign key — every product must belong to a category
         [Required]
         [ForeignKey("Category")]
         public int categoryId { get; set; }                // from list — chosen from categories list
         public Category Category { get; set; }             // navigation property
 
-        [Required]
-        public DateTime createdAt { get; set; }            // system generated — set to today's date
-
-        public bool isAvailable { get; set; } = true;      // default value
 
         // reverse navigation — one Product has many Reviews
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public List<Review> Reviews { get; set; } = new List<Review>();
+
+
 
         // reverse navigation — one Product appears in many OrderItems (bridge table)
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

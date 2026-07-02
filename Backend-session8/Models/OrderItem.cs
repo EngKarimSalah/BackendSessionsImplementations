@@ -25,6 +25,8 @@ namespace ECommerce_Solution.Models
         public int productId { get; set; }                // from list — chosen from available products
         public Product Product { get; set; }              // navigation property
 
+
+
         // relationship attribute — carried by this bridge entity
         [Required]
         [Range(1, 999)]

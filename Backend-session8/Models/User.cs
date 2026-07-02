@@ -36,11 +36,17 @@ namespace ECommerce_Solution.Models
         public DateTime registrationDate { get; set; }    // system generated — set to today's date
 
         public bool isActive { get; set; } = true;        // default value
+       
+        /// /////////////////////////////////////////////////////////////////////////////
+      
+
+
+
 
         // reverse navigation — one User places many Orders
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public List<Order> Orders { get; set; } = new List<Order>();
 
         // reverse navigation — one User writes many Reviews
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public List<Review> Reviews { get; set; } = new List<Review>();
     }
 }

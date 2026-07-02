@@ -71,9 +71,7 @@ namespace ECommerce_Solution
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        // Category functions
-        // ─────────────────────────────────────────────────────────────────────
+ 
         public static void AddCategory()
         {
             Console.WriteLine("\n=== Add New Category ===");
@@ -104,9 +102,6 @@ namespace ECommerce_Solution
                 Console.WriteLine($"ID: {c.categoryId}  |  Name: {c.categoryName}  |  Desc: {c.description}");
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        // Product functions
-        // ─────────────────────────────────────────────────────────────────────
         public static void AddProduct()
         {
             Console.WriteLine("\n=== Add New Product ===");
@@ -166,7 +161,8 @@ namespace ECommerce_Solution
             }
         }
 
-        public static void ViewProductsByCategory()
+        //replacing the previous ViewProductsByCategory method with a new one that uses reverse navigation
+        public static void ViewProductsByCategory() 
         {
             Console.WriteLine("\n=== View Products by Category ===");
 
@@ -180,14 +176,13 @@ namespace ECommerce_Solution
             Category category = context.Categories.FirstOrDefault(c => c.categoryId == categoryId);
 
             Console.WriteLine($"\nProducts in '{category.categoryName}':");
+
             // reverse navigation — no list search needed
             foreach (Product p in category.Products)
                 Console.WriteLine($"  ID: {p.productId}  |  {p.productName}  |  {p.price:C}  |  Stock: {p.stockQuantity}");
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        // Order functions
-        // ─────────────────────────────────────────────────────────────────────
+
         public static void PlaceOrder()
         {
             Console.WriteLine("\n=== Place New Order ===");
@@ -294,9 +289,7 @@ namespace ECommerce_Solution
             Console.WriteLine($"\n  TOTAL SPENT: {grandTotal:C}");
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        // Review functions
-        // ─────────────────────────────────────────────────────────────────────
+
         public static void WriteReview()
         {
             Console.WriteLine("\n=== Write a Review ===");
@@ -373,9 +366,7 @@ namespace ECommerce_Solution
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        // MAIN — Menu loop
-        // ─────────────────────────────────────────────────────────────────────
+
         static void Main(string[] args)
         {
             bool exit = false;

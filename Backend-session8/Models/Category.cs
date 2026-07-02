@@ -19,8 +19,15 @@ namespace ECommerce_Solution.Models
 
         [MaxLength(300)]
         public string imageUrl { get; set; }               // user input
+        /// ///////////////////////////////////////////////////////////////////////
+   
+
+
+
+
+
 
         // reverse navigation — one Category has many Products
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public List<Product> Products { get; set; } = new List<Product>();
     }
 }
