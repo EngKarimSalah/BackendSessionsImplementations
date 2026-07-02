@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerce_Solution.Models
 {
-    [Table("Users")]
+
+   // [Index(nameof(username), nameof(email), IsUnique = true)]
     public class User
     {
         [Key] //by default unique and not null no need to add [Required] attribute
@@ -12,7 +13,7 @@ namespace ECommerce_Solution.Models
 
         [Required]
         [MaxLength(50)]
-        public string username { get; set; }              // user input
+        public string Name { get; set; }              // user input
 
         [Required]
         [MaxLength(150)]
