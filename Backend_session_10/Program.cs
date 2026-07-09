@@ -7,6 +7,9 @@ namespace Backend_session_10
     {
         public static EcommerceContext context = new EcommerceContext();
 
+        //Add in EFCore:
+        //steps: collect new data, create new object, add to DbSet, SaveChanges() to apply to DB 
+
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 01 — Register a New User                          [ADD]
         // ─────────────────────────────────────────────────────────────────────
@@ -38,14 +41,14 @@ namespace Backend_session_10
                 email = email,
                 passwordHash = password,        // production: hash this
                 fullName = fullName,
-                phoneNumber = string.IsNullOrWhiteSpace(phone) ? null : phone,
+                phoneNumber = string.IsNullOrWhiteSpace(phone) ? null : phone,  //input validation ternary operator
                 address = string.IsNullOrWhiteSpace(address) ? null : address,
                 registrationDate = DateTime.Now,
                 isActive = true
             };
 
             context.Users.Add(user);
-            context.SaveChanges();
+            context.SaveChanges();  // apply same change on Db
 
             Console.WriteLine($"User registered successfully. Assigned ID: {user.userId}");
         }
@@ -150,8 +153,31 @@ namespace Backend_session_10
             Console.WriteLine("Payment methods: 1-CreditCard  2-DebitCard  3-PayPal  4-Cash");
             Console.Write("Choose: ");
             int payChoice = int.Parse(Console.ReadLine());
-            string[] methods = { "CreditCard", "DebitCard", "PayPal", "Cash" };
-            string paymentMethod = methods[payChoice - 1];
+            string paymentMethidChoosen;
+
+            switch(payChoice)
+            {
+                case 1:
+                    paymentMethidChoosen = "CreditCard";
+                    break;
+                case 2:
+                    paymentMethidChoosen = "DebitCard";
+                    break;
+                case 3:
+                    paymentMethidChoosen = "PayPal";
+                    break;
+                case 4:
+                    paymentMethidChoosen = "Cash";
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Defaulting to Cash.");
+                    paymentMethidChoosen = "Cash";
+                    break;
+            }
+
+
+            //string[] methods = { "CreditCard", "DebitCard", "PayPal", "Cash" };
+            //string paymentMethod = methods[payChoice - 1];
 
             // INSERT Order first to get the orderId from DB
             Order order = new Order
@@ -161,13 +187,15 @@ namespace Backend_session_10
                 totalAmount = 0,
                 status = "Pending",
                 shippingAddress = shippingAddress,
-                paymentMethod = paymentMethod
+                paymentMethod = paymentMethidChoosen
             };
             context.Orders.Add(order);
-            context.SaveChanges();   // orderId is now assigned
+            context.SaveChanges();   // orderId is now assigned ( must completed before adding OrderItems to DB)
 
+            /////////////////////////////////////////////////////////
 
-            while (true)
+            bool addingProducts = true;
+            while (addingProducts == true)
             {
                 List<Product> available = context.Products
                     .Where(p => p.isAvailable && p.stockQuantity > 0)
@@ -180,10 +208,12 @@ namespace Backend_session_10
                 Console.Write("Enter product ID to add (0 to finish): ");
                 int productId = int.Parse(Console.ReadLine());
 
-                Product product = context.Products.FirstOrDefault(p => p.productId == productId);
-
                 Console.Write("Enter quantity: ");
                 int qty = int.Parse(Console.ReadLine());
+
+                Product product = context.Products.FirstOrDefault(p => p.productId == productId);
+
+
 
                 // INSERT OrderItem — bridge entity
                 context.OrderItems.Add(new OrderItem
@@ -198,8 +228,16 @@ namespace Backend_session_10
                 product.stockQuantity -= qty;
                 order.totalAmount += (decimal)product.price * qty;
 
-                context.SaveChanges();  // INSERT OrderItem + UPDATE Product + UPDATE Order
+
+                Console.WriteLine("do you want to add extra products? Y or N");
+                string response = Console.ReadLine().Trim().ToLower();
+                if (response != "y")
+                {
+                    addingProducts = false;
+                }
             }
+            context.SaveChanges();  // INSERT OrderItem + UPDATE Product + UPDATE Order
+
 
             Console.WriteLine($"\nOrder placed! Order ID: {order.orderId}  |  Total: {order.totalAmount:C}");
         }
@@ -208,7 +246,8 @@ namespace Backend_session_10
 
 
 
-
+        //update in EFCore:  ( update is a value change on an existing object, not a new object creation)
+        //steps: retrieve existing object, collect new values and modify properties with it, SaveChanges() to apply to DB
 
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 05 — Update Product Price and Availability       [UPDATE]
@@ -224,14 +263,17 @@ namespace Backend_session_10
             Console.Write("Enter product ID to update: ");
             int productId = int.Parse(Console.ReadLine());
 
+            // Retrieve the existing product from the database
             Product product = context.Products.FirstOrDefault(p => p.productId == productId);
 
-            Console.Write($"Enter new price (current: {product.price:C}): ");
-            product.price = double.Parse(Console.ReadLine());
 
+            // Collect new values from user input and update the product object
+            Console.Write($"Enter new price:");
+            product.price = double.Parse(Console.ReadLine());
             Console.Write($"Is available? (y/n, current: {product.isAvailable}): ");
             product.isAvailable = Console.ReadLine().Trim().ToLower() == "y";
 
+            // Save changes to the database ( apply same change on Db)
             context.SaveChanges();  // EF Core change tracker sends UPDATE SQL
 
             Console.WriteLine("Product updated successfully.");
@@ -268,7 +310,8 @@ namespace Backend_session_10
 
 
 
-
+        //delete in EFCore:  ( delete is a removal of an existing object, not a new object creation)
+        // steps: retrieve existing object, call Remove() on DbSet, SaveChanges() to apply to DB
 
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 07 — Delete a Review                             [DELETE]
@@ -281,8 +324,11 @@ namespace Backend_session_10
             Console.Write("Enter review ID to delete: ");
             int reviewId = int.Parse(Console.ReadLine());
 
+            // Retrieve the existing review from the database
             Review review = context.reviews.FirstOrDefault(r => r.reviewId == reviewId);
 
+
+            // Remove the review from the DbSet and save changes to the database
             context.reviews.Remove(review);
             context.SaveChanges();  // DELETE FROM reviews WHERE reviewId = ...
 
@@ -354,9 +400,15 @@ namespace Backend_session_10
             int categoryId = int.Parse(Console.ReadLine());
 
             // Include loads Products in the same SQL query — one JOIN, no second query
+            // loading all needed data
             Category category = context.Categories
-                .Include(c => c.Products)
-                .FirstOrDefault(c => c.categoryId == categoryId);
+
+                               .Include(c => c.Products)
+                               .ThenInclude(p => p.Reviews)
+                               .ThenInclude(r => r.U)
+                               .ThenInclude(u => u.Orders)
+
+                               .FirstOrDefault(c => c.categoryName == "electroincs");
 
             Console.WriteLine($"\nCategory: {category.categoryName}");
             Console.WriteLine($"Description: {category.description}");
@@ -484,9 +536,12 @@ namespace Backend_session_10
                 Console.WriteLine(" 2  - Add Product                     [ADD]");
                 Console.WriteLine(" 3  - Place Order                     [ADD]");
                 Console.WriteLine(" 4  - Write Review                    [ADD]");
+
                 Console.WriteLine(" 5  - Update Product Price            [UPDATE]");
                 Console.WriteLine(" 6  - Cancel Order                    [UPDATE]");
+
                 Console.WriteLine(" 7  - Delete Review                   [DELETE]");
+
                 Console.WriteLine(" 8  - View All Products               [GET-ALL]");
                 Console.WriteLine(" 9  - Filter Products by Category     [FILTER]");
                 Console.WriteLine(" 10 - Get Category with Products      [INCLUDE]");

@@ -24,11 +24,6 @@ namespace Backend_session_10_SoC.Presentations
         {
             Console.WriteLine("\n=== Place New Order ===");
 
-            List<User> users = userService.GetAll();
-            Console.WriteLine("Users:");
-            foreach (User u in users)
-                Console.WriteLine($"  ID: {u.userId}  |  {u.Name}");
-
             Console.Write("Enter user ID: ");
             int userId = int.Parse(Console.ReadLine());
 
@@ -43,7 +38,8 @@ namespace Backend_session_10_SoC.Presentations
 
             int orderId = orderService.CreateOrder(userId, shippingAddress, paymentMethod);
 
-            while (true)
+            bool addingProducts = true;
+            while (addingProducts == true)
             {
                 List<Product> available = productService.GetAvailable();
                 Console.WriteLine("\nAvailable products:");
@@ -59,6 +55,13 @@ namespace Backend_session_10_SoC.Presentations
 
                 orderService.AddItemToOrder(orderId, productId, qty);
                 Console.WriteLine("Item added to order.");
+
+                Console.WriteLine("do you want to add extra products? Y or N");
+                string response = Console.ReadLine().Trim().ToLower();
+                if (response != "y")
+                {
+                    addingProducts = false;
+                }
             }
 
             Console.WriteLine($"\nOrder placed! Order ID: {orderId}");

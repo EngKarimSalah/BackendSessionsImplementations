@@ -14,6 +14,11 @@ namespace Backend_session_10_SoC.Repositories
 
         public List<Product> GetAll()
         {
+            return context.Products.ToList();
+        }
+
+        public List<Product> GetAllWithCategory()
+        {
             return context.Products
                 .Include(p => p.c)
                 .ToList();
