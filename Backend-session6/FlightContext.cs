@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace FMS_Solution
 {
-    public class FlightContext : DbConnection
+    public class FlightContext 
     {
         public List<Passenger> Passengers   { get; set; }
         public List<Pilot>     Pilots       { get; set; }
