@@ -32,7 +32,7 @@ namespace Backend_session_10
             Console.Write("Enter address (optional — press Enter to skip): ");
             string address = Console.ReadLine();
 
-            context.Users.Add(new User
+            User user = new User()
             {
                 Name = name,
                 email = email,
@@ -42,12 +42,12 @@ namespace Backend_session_10
                 address = string.IsNullOrWhiteSpace(address) ? null : address,
                 registrationDate = DateTime.Now,
                 isActive = true
-            });
+            };
 
+            context.Users.Add(user);
             context.SaveChanges();
 
-            User saved = context.Users.OrderBy(u => u.userId).Last();
-            Console.WriteLine($"User registered successfully. Assigned ID: {saved.userId}");
+            Console.WriteLine($"User registered successfully. Assigned ID: {user.userId}");
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ namespace Backend_session_10
             Console.Write("Enter stock quantity: ");
             int stock = int.Parse(Console.ReadLine());
 
-            context.Products.Add(new Product
+            Product product = new Product
             {
                 productName = name,
                 description = string.IsNullOrWhiteSpace(desc) ? null : desc,
@@ -86,12 +86,52 @@ namespace Backend_session_10
                 categoryId = categoryId,
                 createdAt = DateTime.Now,
                 isAvailable = true
-            });
+            }; 
+            
+            context.Products.Add(product);
+            context.SaveChanges();
+            
+            Console.WriteLine($"Product added. Assigned ID: {product.productId}");
+        }
 
+        // ─────────────────────────────────────────────────────────────────────
+        // SERVICE 04 — Write a Product Review                      [ADD]
+        // ─────────────────────────────────────────────────────────────────────
+        public static void WriteReview()
+        {
+            Console.WriteLine("\n=== Write a Review ===");
+
+            Console.Write("Enter user ID: ");
+            int userId = int.Parse(Console.ReadLine());
+
+            List<Product> products = context.Products.ToList();
+
+            Console.WriteLine("\nProducts:");
+            foreach (Product p in products)
+                Console.WriteLine($"  ID: {p.productId}  |  {p.productName}");
+
+            Console.Write("Enter product ID to review: ");
+            int productId = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter rating (1-5): ");
+            int rating = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter comment (optional): ");
+            string comment = Console.ReadLine();
+
+            Review review = new Review
+            {
+                userId = userId,
+                productId = productId,
+                rating = rating,
+                comment = string.IsNullOrWhiteSpace(comment) ? null : comment,
+                reviewDate = DateTime.Now
+            };
+
+            context.reviews.Add(review);
             context.SaveChanges();
 
-            Product saved = context.Products.OrderBy(p => p.productId).Last();
-            Console.WriteLine($"Product added. Assigned ID: {saved.productId}");
+            Console.WriteLine($"Review submitted! Review ID: {review.reviewId}");
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -100,11 +140,6 @@ namespace Backend_session_10
         public static void PlaceOrder()
         {
             Console.WriteLine("\n=== Place New Order ===");
-
-            List<User> users = context.Users.ToList();
-            Console.WriteLine("Users:");
-            foreach (User u in users)
-                Console.WriteLine($"  ID: {u.userId}  |  {u.Name}");
 
             Console.Write("Enter user ID: ");
             int userId = int.Parse(Console.ReadLine());
@@ -131,6 +166,7 @@ namespace Backend_session_10
             context.Orders.Add(order);
             context.SaveChanges();   // orderId is now assigned
 
+
             while (true)
             {
                 List<Product> available = context.Products
@@ -143,7 +179,6 @@ namespace Backend_session_10
 
                 Console.Write("Enter product ID to add (0 to finish): ");
                 int productId = int.Parse(Console.ReadLine());
-                if (productId == 0) break;
 
                 Product product = context.Products.FirstOrDefault(p => p.productId == productId);
 
@@ -169,47 +204,11 @@ namespace Backend_session_10
             Console.WriteLine($"\nOrder placed! Order ID: {order.orderId}  |  Total: {order.totalAmount:C}");
         }
 
-        // ─────────────────────────────────────────────────────────────────────
-        // SERVICE 04 — Write a Product Review                      [ADD]
-        // ─────────────────────────────────────────────────────────────────────
-        public static void WriteReview()
-        {
-            Console.WriteLine("\n=== Write a Review ===");
 
-            List<User> users = context.Users.ToList();
-            Console.WriteLine("Users:");
-            foreach (User u in users)
-                Console.WriteLine($"  ID: {u.userId}  |  {u.Name}");
-            Console.Write("Enter user ID: ");
-            int userId = int.Parse(Console.ReadLine());
 
-            List<Product> products = context.Products.ToList();
-            Console.WriteLine("\nProducts:");
-            foreach (Product p in products)
-                Console.WriteLine($"  ID: {p.productId}  |  {p.productName}");
-            Console.Write("Enter product ID to review: ");
-            int productId = int.Parse(Console.ReadLine());
 
-            Console.Write("Enter rating (1-5): ");
-            int rating = int.Parse(Console.ReadLine());
 
-            Console.Write("Enter comment (optional): ");
-            string comment = Console.ReadLine();
 
-            context.reviews.Add(new Review
-            {
-                userId = userId,
-                productId = productId,
-                rating = rating,
-                comment = string.IsNullOrWhiteSpace(comment) ? null : comment,
-                reviewDate = DateTime.Now
-            });
-
-            context.SaveChanges();
-
-            Review saved = context.reviews.OrderBy(r => r.reviewId).Last();
-            Console.WriteLine($"Review submitted! Review ID: {saved.reviewId}");
-        }
 
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 05 — Update Product Price and Availability       [UPDATE]
@@ -245,13 +244,6 @@ namespace Backend_session_10
         {
             Console.WriteLine("\n=== Cancel an Order ===");
 
-            List<Order> orders = context.Orders
-                .Where(o => o.status != "Cancelled")
-                .ToList();
-
-            foreach (Order o in orders)
-                Console.WriteLine($"  ID: {o.orderId}  |  Date: {o.orderDate:d}  |  Status: {o.status}  |  Total: {o.totalAmount:C}");
-
             Console.Write("Enter order ID to cancel: ");
             int orderId = int.Parse(Console.ReadLine());
 
@@ -274,6 +266,10 @@ namespace Backend_session_10
             Console.WriteLine($"Order {orderId} cancelled. {items.Count} product stock(s) restored.");
         }
 
+
+
+
+
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 07 — Delete a Review                             [DELETE]
         // ─────────────────────────────────────────────────────────────────────
@@ -281,9 +277,6 @@ namespace Backend_session_10
         {
             Console.WriteLine("\n=== Delete a Review ===");
 
-            List<Review> reviews = context.reviews.ToList();
-            foreach (Review r in reviews)
-                Console.WriteLine($"  ID: {r.reviewId}  |  Rating: {r.rating}  |  Comment: {r.comment}");
 
             Console.Write("Enter review ID to delete: ");
             int reviewId = int.Parse(Console.ReadLine());
@@ -295,6 +288,9 @@ namespace Backend_session_10
 
             Console.WriteLine($"Review {reviewId} deleted.");
         }
+
+
+
 
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 08 — View All Products                           [GET-ALL]
@@ -370,17 +366,16 @@ namespace Backend_session_10
                 Console.WriteLine($"  ID: {p.productId}  |  {p.productName}  |  {p.price:C}  |  Stock: {p.stockQuantity}");
         }
 
+
+
+
+
         // ─────────────────────────────────────────────────────────────────────
         // SERVICE 11 — View Order History with Full Details        [INCLUDE + ThenInclude]
         // ─────────────────────────────────────────────────────────────────────
         public static void ViewOrderHistory()
         {
             Console.WriteLine("\n=== Order History with Full Details ===");
-
-            List<User> users = context.Users.ToList();
-            Console.WriteLine("Users:");
-            foreach (User u in users)
-                Console.WriteLine($"  ID: {u.userId}  |  {u.Name}");
 
             Console.Write("Enter user ID: ");
             int userId = int.Parse(Console.ReadLine());
@@ -445,6 +440,9 @@ namespace Backend_session_10
                                   $" {item.stockQuantity,-7} {item.ReviewCount,-9} {item.AvgRating:F1}");
             }
 
+
+
+
             // Part B — Lazy Loading demo
             // Product.Reviews and Product.c are virtual — EF Core fires a separate query on first access
             Console.WriteLine("\n--- Lazy Loading Demo ---");
@@ -467,6 +465,8 @@ namespace Backend_session_10
             Console.WriteLine($"Reviews  (lazy): {reviewCount}");
             Console.WriteLine("(Each navigation access above fired a separate database query)");
         }
+
+
 
         // ─────────────────────────────────────────────────────────────────────
         // MAIN — Menu Loop
