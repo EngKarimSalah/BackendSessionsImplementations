@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Backend_session_10_SoC.Models
+namespace Backend_session_10.Models
 {
 
    [Index(nameof(Name), nameof(email), IsUnique = true)]

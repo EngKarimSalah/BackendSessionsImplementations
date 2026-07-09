@@ -1,7 +1,7 @@
-﻿using Backend_session_10_SoC.Models;
+﻿using Backend_session_10.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend_session_10_SoC
+namespace Backend_session_10
 {
     public class Program
     {

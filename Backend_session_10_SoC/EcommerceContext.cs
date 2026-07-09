@@ -1,11 +1,11 @@
-﻿using Backend_session_10_SoC.Models;
+﻿using Backend_session_10.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace Backend_session_10_SoC
+namespace Backend_session_10
 {
     public class EcommerceContext : DbContext
     {

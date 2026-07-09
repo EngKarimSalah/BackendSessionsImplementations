@@ -8,5 +8,5 @@
   <Project Path="Backend_session1/Backend_session1.csproj" Id="eedd3b7b-25ab-4897-a4bb-bb3b42db7be0" />
   <Project Path="Backend_session4/Backend_session4.csproj" Id="21036397-1835-48c1-9755-0f0047dae037" />
   <Project Path="Backend_session5/Backend_session5.csproj" />
-  <Project Path="Backend_session_10_SoC/Backend_session_10_SoC.csproj" Id="4a17e37a-1790-4260-b8f3-795469a005b0" />
+  <Project Path="Backend_session_10_SoC/Backend_session_10.csproj" Id="4a17e37a-1790-4260-b8f3-795469a005b0" />
 </Solution>

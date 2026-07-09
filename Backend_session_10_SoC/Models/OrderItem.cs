@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Backend_session_10_SoC.Models
+namespace Backend_session_10.Models
 {
     // Bridge entity that resolves the Order <-> Product many-to-many relationship
     // into two one-to-many relationships (Order -> OrderItem, Product -> OrderItem)
