@@ -19,8 +19,10 @@ namespace FirstWebApp
             builder.Services.AddDbContext<ProjectContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+            //service lifetime
             builder.Services.AddScoped<ProductRepo>();
+            //builder.Services.AddTransient<ProductRepo>();
+            //builder.Services.AddSingleton<ProductRepo>();
             //builder.Services.AddScoped<CategoryRepo>();
             //builder.Services.AddScoped<UserRepo>();
             //builder.Services.AddScoped<ReviewRepo>();
@@ -32,6 +34,9 @@ namespace FirstWebApp
 
 
             builder.Services.AddControllers();
+
+
+
 
             // Swagger
             builder.Services.AddEndpointsApiExplorer();

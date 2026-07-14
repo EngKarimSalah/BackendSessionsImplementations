@@ -1,10 +1,13 @@
-﻿using FirstWebApp.Models;
+﻿using FirstWebApp.DTOs;
+using FirstWebApp.Models;
 using FirstWebApp.Repositories;
+using System.Security.Cryptography.Pkcs;
 
 namespace FirstWebApp.Services
 {
     public class ProductService
     {
+
 
         //ProductRepo repo = new ProductRepo();
 
@@ -16,17 +19,35 @@ namespace FirstWebApp.Services
         }
 
 
+        //Auto mapper
 
 
-
-        public List<Product> GetAllProducts()
+        public List<ProductOutputDTO> GetAllProducts()
         {
-            return repo.GetAllProducts();
+            List<Product> products = repo.GetAllProducts();
+
+            List<ProductOutputDTO> outputs = new List<ProductOutputDTO>();
+            ProductOutputDTO output = new ProductOutputDTO();
+
+            foreach (Product product in products)
+            {
+                output.Price = product.Price;
+                output.Name = product.Name;
+                outputs.Add(output);
+            }
+            return outputs;
         }
 
-        public Product GetProductById(int id)
+        public ProductAllOutputDTO GetProductById(int id)
         {
-            return repo.GetProductById(id);
+            Product p = repo.GetProductById(id);
+
+            ProductAllOutputDTO output = new ProductAllOutputDTO();
+            output.Price= p.Price;
+            output.Name = p.Name;
+            output.Description = p.Description;
+
+            return output;
         }
 
 
@@ -35,6 +56,21 @@ namespace FirstWebApp.Services
 
             repo.Add(product);
             return product.Id;
+        }
+
+
+        public int Create(ProductInputDTO product)
+        {
+
+            Product p = new Product();
+            p.Name = product.Name;
+            p.Price=product.Price;
+            p.Description = product.Description;
+            p.createdDate = DateTime.Now;
+            p.Count = 0;
+
+            repo.Add(p);
+            return p.Id;
         }
 
         public bool UpdatePrice(int productId, int newPrice)
