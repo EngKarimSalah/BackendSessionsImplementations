@@ -22,21 +22,34 @@ namespace FirstWebApp.Services
         //Auto mapper
 
 
+        //public List<ProductOutputDTO> GetAllProducts()
+        //{
+        //    List<Product> products = repo.GetAllProducts();
+
+        //    List<ProductOutputDTO> outputs = new List<ProductOutputDTO>();
+
+        //    foreach (Product product in products)
+        //    {
+        //        ProductOutputDTO output = new ProductOutputDTO();
+
+        //        output.Price = product.Price;
+        //        output.Name = product.Name;
+        //        outputs.Add(output);
+        //    }
+        //    return outputs;
+        //}
+
         public List<ProductOutputDTO> GetAllProducts()
         {
-            List<Product> products = repo.GetAllProducts();
-
-            List<ProductOutputDTO> outputs = new List<ProductOutputDTO>();
-            ProductOutputDTO output = new ProductOutputDTO();
-
-            foreach (Product product in products)
-            {
-                output.Price = product.Price;
-                output.Name = product.Name;
-                outputs.Add(output);
-            }
-            return outputs;
+            return repo.GetAllProducts()
+                       .Select(product => new ProductOutputDTO
+                       {
+                           Name = product.Name,
+                           Price = product.Price
+                       })
+                       .ToList();
         }
+
 
         public ProductAllOutputDTO GetProductById(int id)
         {
@@ -73,7 +86,7 @@ namespace FirstWebApp.Services
             return p.Id;
         }
 
-        public bool UpdatePrice(int productId, int newPrice)
+        public bool UpdateCount(int productId, int newCount)
         {
             Product product = repo.GetProductById(productId);
             if (product == null)
@@ -81,7 +94,7 @@ namespace FirstWebApp.Services
                 return false;
             }
 
-            product.Price = newPrice;
+            product.Count = newCount;
             repo.Update();
             return true;
          

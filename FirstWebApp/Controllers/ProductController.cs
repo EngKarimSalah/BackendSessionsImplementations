@@ -69,16 +69,17 @@ namespace FirstWebApp.Controllers
         {
             int productId = productService.Create(product);
 
+            return Ok(new { ProductId = productId }); //200, ProductId=1
             return Ok("product added successfully");  /// 200, product added successfully
 
         }
 
         //http://localhost:5153/product/UpdatePrice/3/iphone17?newPrice=200&&newNAme="iphone17"
-        //http://localhost:5153/product/UpdatePrice/3?newPrice=200
-        [HttpPut("UpdatePrice/{productId}")]
-        public IActionResult UpdatePrice([FromRoute] int productId, [FromQuery] int newPrice)
+        //http://localhost:5153/product/UpdatePrice/3?newCount=200
+        [HttpPut("UpdateCount/{productId}")]
+        public IActionResult UpdateCount([FromRoute] int productId, [FromQuery] int newCount)
         {
-            bool updated = productService.UpdatePrice(productId, newPrice);
+            bool updated = productService.UpdateCount(productId, newCount);
 
             if (!updated)
                 return NotFound();
@@ -100,3 +101,18 @@ namespace FirstWebApp.Controllers
         }
     }
 }
+
+
+//monolith application ==> the whole solution is one project
+
+//service oriented application / microservices application ==> one solution divided on many projects
+// in this case there are 2 options of communication:
+//1- direct api call between projects
+//2- message queuing => most common message queue is RabbitMQ
+
+//--------------------------------------------------------------------
+// API producer ( backend ) => Expose API
+// API consumer ( frontend, another backend ) => consume API
+
+// syncronouns programming
+// Asyncronouns programming
