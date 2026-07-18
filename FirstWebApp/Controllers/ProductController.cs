@@ -1,12 +1,14 @@
 ﻿using FirstWebApp.DTOs;
 using FirstWebApp.Models;
 using FirstWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FirstWebApp.Controllers
 {
     [ApiController]
     [Route("product")]
+    [Authorize]
     public class ProductController : ControllerBase
     {
 
@@ -21,7 +23,7 @@ namespace FirstWebApp.Controllers
 
 
 
-
+        [AllowAnonymous]
         [HttpGet("GetAllProducts")]        
         public IActionResult GetAllProducts()
         {
@@ -34,6 +36,7 @@ namespace FirstWebApp.Controllers
 
             return NoContent(); //204 no data
         }
+
 
 
         //http://localhost:5153/product/GetProductById?id=3 //from query
@@ -53,17 +56,10 @@ namespace FirstWebApp.Controllers
             return Ok (product);   //200 succeeded
         }
 
-        [HttpPost("Add")]
-        public IActionResult Add([FromBody] Product product)
-        {
-            int productId = productService.Create(product);
-
-            return Ok("product added successfully");  /// 200, product added successfully
-            return Ok(new { ProductId = productId }); //200, ProductId=1
-            return Created(); // 201  created / added
-        }
 
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddDTO")]
         public IActionResult AddDTO([FromBody] ProductInputDTO product)
         {
@@ -74,8 +70,9 @@ namespace FirstWebApp.Controllers
 
         }
 
-        //http://localhost:5153/product/UpdatePrice/3/iphone17?newPrice=200&&newNAme="iphone17"
+
         //http://localhost:5153/product/UpdatePrice/3?newCount=200
+        [Authorize(Roles = "Admin")]
         [HttpPut("UpdateCount/{productId}")]
         public IActionResult UpdateCount([FromRoute] int productId, [FromQuery] int newCount)
         {
@@ -88,6 +85,8 @@ namespace FirstWebApp.Controllers
            // return NoContent();
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("Delete/{productId}")]
         public IActionResult Delete([FromRoute] int productId)
         {
